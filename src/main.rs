@@ -2,6 +2,9 @@ mod level1;
 use std::io;
 
 fn main() -> Result<(), io::Error> {
-    level1::part1()?;
+    let fuel_mass: u32 = level1::part1()?;
+    println!("{}", fuel_mass);
+    let fuel_mass: u32 = level1::part2()?;
+    println!("{}", fuel_mass);
     Ok(())
 }
