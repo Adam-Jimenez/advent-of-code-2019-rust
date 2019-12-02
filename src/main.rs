@@ -8,6 +8,6 @@ fn main() -> Result<(), io::Error> {
     // let fuel_mass: u32 = level1::part2()?;
     // println!("{}", fuel_mass);
 
-    println!("{:?}", level2::part1());
+    println!("{:?}", level2::part2());
     Ok(())
 }
