@@ -1,6 +1,7 @@
 mod level1;
 mod level2;
 mod level3;
+mod level4;
 use std::io;
 
 fn main() -> Result<(), io::Error> {
@@ -10,6 +11,8 @@ fn main() -> Result<(), io::Error> {
     // println!("{}", fuel_mass);
 
     // println!("{:?}", level2::part2());
-    level3::part2();
+    // level3::part2();
+    // level4::part1();
+    level4::part2();
     Ok(())
 }
