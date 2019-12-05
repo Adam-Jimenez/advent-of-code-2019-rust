@@ -15,6 +15,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     // level3::part2();
     // level4::part1();
     // level4::part2();
-    level5::part1()?;
+    level5::part2()?;
     Ok(())
 }
