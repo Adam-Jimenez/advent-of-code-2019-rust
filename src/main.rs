@@ -17,6 +17,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // level4::part1();
     // level4::part2();
     // level5::part2()?;
-    println!("{}", level6::part1()?);
+    // println!("{}", level6::part1()?);
+    level6::part2()?;
     Ok(())
 }
