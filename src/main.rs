@@ -3,6 +3,7 @@ mod level2;
 mod level3;
 mod level4;
 mod level5;
+mod level6;
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -15,6 +16,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // level3::part2();
     // level4::part1();
     // level4::part2();
-    level5::part2()?;
+    // level5::part2()?;
+    println!("{}", level6::part1()?);
     Ok(())
 }
