@@ -87,8 +87,9 @@ impl Computer {
         while self.eip < self.memory.len() {
             let mem_debug = self.memory.iter().map(|d| d.to_string()).collect::<Vec<String>>();
             let offset: usize = mem_debug[..self.eip].iter().map(|x| x.len()).fold(0, |acc, val| acc + val) + self.eip;
-            println!("{}", mem_debug.join(" "));
-            println!("{}^", " ".repeat(offset));
+            // println!("{}", mem_debug.join(" "));
+            // println!("{}^", " ".repeat(offset));
+            // println!("eip: {}", self.eip);
             let operation = Computer::parse_opcode(self.memory[self.eip]);
             // 1 = ADD 1 2 into 3
             if operation.opcode == 1 {
@@ -98,7 +99,7 @@ impl Computer {
                 if operation.param_mode_3 == 2 {
                     num_3 = num_3 as i64 + self.relative_base;
                 }
-                println!("ADD {} {} @ {}", num_1, num_2, num_3);
+                // println!("ADD {} {} @ {}", num_1, num_2, num_3);
                 self.write_memory( num_3 as usize, num_1 + num_2);
                 self.eip += 4;
             }
@@ -110,7 +111,7 @@ impl Computer {
                 if operation.param_mode_3 == 2 {
                     num_3 = num_3 as i64 + self.relative_base;
                 }
-                println!("MULTIPLY {} {} @ {}", num_1, num_2, num_3);
+                // println!("MULTIPLY {} {} @ {}", num_1, num_2, num_3);
                 self.write_memory(num_3 as usize, num_1 * num_2);
                 self.eip += 4;
             }
@@ -121,7 +122,7 @@ impl Computer {
                     num_1 = num_1 as i64 + self.relative_base;
                 }
                 let input_value: i64 = input_params.pop_front().unwrap();
-                println!("Input: {}", input_value);
+                // println!("Input: {}", input_value);
                 self.write_memory( num_1 as usize, input_value);
                 self.eip += 2;
             }
@@ -130,14 +131,14 @@ impl Computer {
                 let num_1 = self.get_parameter(operation.param_mode_1, self.read_memory( self.eip+1 ));
                 output_params.push_back(num_1);
                 self.eip += 2;
-                println!("Output: {}", num_1);
-                // return Ok(output_params);
+                // println!("Output: {}", num_1);
+                return Ok(output_params);
             }
             // 5 = JUMP TO 2 if 1 != 0
             else if operation.opcode == 5 {
                 let num_1 = self.get_parameter(operation.param_mode_1, self.read_memory( self.eip+1 ));
                 let num_2 = self.get_parameter(operation.param_mode_2, self.read_memory( self.eip+2 ));
-                println!("IF {} != 0, JUMP TO {}", num_1, num_2);
+                // println!("IF {} != 0, JUMP TO {}", num_1, num_2);
                 if num_1 != 0 {
                     self.eip = num_2 as usize;
                 } else {
@@ -149,7 +150,7 @@ impl Computer {
             else if operation.opcode == 6 {
                 let num_1 = self.get_parameter(operation.param_mode_1, self.read_memory( self.eip+1 ));
                 let num_2 = self.get_parameter(operation.param_mode_2, self.read_memory( self.eip+2 ));
-                println!("IF {} == 0, JUMP TO {}", num_1, num_2);
+                // println!("IF {} == 0, JUMP TO {}", num_1, num_2);
                 if num_1 == 0 {
                     self.eip = num_2 as usize;
                 } else {
@@ -165,7 +166,7 @@ impl Computer {
                 if operation.param_mode_3 == 2 {
                     num_3 = (num_3 as i64 + self.relative_base) as usize;
                 }
-                println!("{} < {} into {}", num_1, num_2, num_3);
+                // println!("{} < {} into {}", num_1, num_2, num_3);
                 if num_1 < num_2 {
                     self.write_memory( num_3, 1);
                 } else {
@@ -181,7 +182,7 @@ impl Computer {
                 if operation.param_mode_3 == 2 {
                     num_3 = (num_3 as i64 + self.relative_base) as usize;
                 }
-                println!("{} == {} into {}", num_1, num_2, num_3);
+                // println!("{} == {} into {}", num_1, num_2, num_3);
                 if num_1 == num_2 {
                     self.write_memory( num_3  , 1);
                 } else {
@@ -193,7 +194,7 @@ impl Computer {
             else if operation.opcode == 9 {
                 let num_1 = self.get_parameter(operation.param_mode_1, self.read_memory( self.eip+1 ));
                 self.relative_base += num_1;
-                println!("INCREMENT RELATIVE BASE BY {} = {}", num_1, self.relative_base);
+                // println!("INCREMENT RELATIVE BASE BY {} = {}", num_1, self.relative_base);
                 self.eip += 2;
             }
             // 99 = HALT
@@ -208,6 +209,7 @@ impl Computer {
                 return Err(Box::new(ExecError{}));
             }
             // io::stdin().read_line(&mut String::new());
+            println!("{:?}", self.backup_memory);
         }
         Ok(output_params)
     }
@@ -221,6 +223,6 @@ pub fn part1() {
         backup_memory: HashMap::new()
     };
     let mut input = VecDeque::new();
-    input.push_back(1);
+    input.push_back(2);
     println!("{:?}", computer.execute(&mut input));
 }
