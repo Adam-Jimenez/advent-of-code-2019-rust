@@ -209,7 +209,6 @@ impl Computer {
                 return Err(Box::new(ExecError{}));
             }
             // io::stdin().read_line(&mut String::new());
-            println!("{:?}", self.backup_memory);
         }
         Ok(output_params)
     }
