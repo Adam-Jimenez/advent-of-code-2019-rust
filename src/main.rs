@@ -26,6 +26,6 @@ fn main() -> Result<(), Box<dyn Error>> {
     // level7::try_amplifiers()?;
     // level8::part1();
     // level9::part1();
-    level10::part1();
+    level10::part2();
     Ok(())
 }
