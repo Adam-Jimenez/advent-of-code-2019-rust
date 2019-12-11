@@ -24,7 +24,7 @@ struct Operation {
 }
 
 
-struct Computer {
+pub struct Computer {
     eip: usize,
     relative_base: i64,
     memory: Vec<i64>,
@@ -32,6 +32,14 @@ struct Computer {
 }
 
 impl Computer {
+    pub fn new(code_path: &str) -> Self {
+        Computer { 
+            eip: 0,
+            relative_base:0,
+            memory: Computer::parse_code(code_path).unwrap(),
+            backup_memory: HashMap::new()
+        }
+    }
     fn parse_opcode(opcode: i64) -> Operation {
         let mut args = [0,0,0,0,0];
         let arg_len = args.len();
@@ -61,8 +69,8 @@ impl Computer {
         }
     }
 
-    pub fn parse_code() -> Result<Vec<i64>, Box<dyn Error>> {
-        let code: String = fs::read_to_string("src/level9/input.txt")?;
+    pub fn parse_code(path: &str) -> Result<Vec<i64>, Box<dyn Error>> {
+        let code: String = fs::read_to_string(path)?;
         Ok(code.trim()
             .split(",")
             .map(|x| x.parse().unwrap())
@@ -218,7 +226,7 @@ pub fn part1() {
     let mut computer = Computer { 
         eip: 0,
         relative_base:0,
-        memory: Computer::parse_code().unwrap(),
+        memory: Computer::parse_code("src/level9/input.txt").unwrap(),
         backup_memory: HashMap::new()
     };
     let mut input = VecDeque::new();

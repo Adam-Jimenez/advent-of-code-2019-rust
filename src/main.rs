@@ -8,6 +8,7 @@ mod level7;
 mod level8;
 mod level9;
 mod level10;
+mod level11;
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -26,6 +27,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // level7::try_amplifiers()?;
     // level8::part1();
     // level9::part1();
-    level10::part2();
+    // level10::part2();
+    level11::part1();
     Ok(())
 }
