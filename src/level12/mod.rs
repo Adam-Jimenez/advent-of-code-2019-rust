@@ -1,7 +1,27 @@
 use std::fs;
 use std::error::Error;
+use std::collections::HashSet;
+use std::cmp::{max, min};
+ 
+fn gcd(a: usize, b: usize) -> usize {
+    match ((a, b), (a & 1, b & 1)) {
+        ((x, y), _) if x == y => y,
+        ((0, x), _) | ((x, 0), _) => x,
+        ((x, y), (0, 1)) | ((y, x), (1, 0)) => gcd(x >> 1, y),
+        ((x, y), (0, 0)) => gcd(x >> 1, y >> 1) << 1,
+        ((x, y), (1, 1)) => {
+            let (x, y) = (min(x, y), max(x, y));
+            gcd((y - x) >> 1, x)
+        }
+        _ => unreachable!(),
+    }
+}
+ 
+fn lcm(a: usize, b: usize) -> usize {
+    a * b / gcd(a, b)
+}
 
-#[derive(PartialEq, Eq, Debug)]
+#[derive(PartialEq, Eq, Debug, Hash, Clone)]
 struct Moon {
     coordinates: [i32; 3],
     velocity: [i32; 3]
@@ -63,10 +83,27 @@ pub fn part1() -> Result<(), Box<dyn Error>> {
     let input: String = input.chars().filter(|&c| charset.contains(c)).collect();
     let input: Vec<Vec<i32>> = input.trim().split("\n").map(|l| l.trim().split(",").map(|n| n.parse().unwrap()).collect()).collect();
     let mut moons: Vec<Moon> = input.iter().map(|x| Moon::new(x[0], x[1], x[2])).collect();
-    for _ in 0..1000 {
-        println!("{:?}", moons);
-        step(&mut moons);
+    let mut states: [HashSet<Vec<(i32, i32)>>; 3] = [
+        HashSet::new(),
+        HashSet::new(),
+        HashSet::new()
+    ];
+    for i in 0..3 {
+        states[i].insert(moons.iter().map(|m| (m.coordinates[i], m.velocity[i])).collect());
     }
-    println!("{}", energy(&moons));
+    let mut cycles = [0,0,0];
+    for i in 1.. {
+        step(&mut moons);
+        for j in 0..3 {
+            if states[j].contains(&moons.iter().map(|m| (m.coordinates[j], m.velocity[j])).collect::<Vec<(i32, i32)>>()) {
+                cycles[j] = i;
+            }
+        }
+        if cycles.iter().all(|&x| x != 0) {
+            break;
+        }
+    }
+    println!("{:?}", cycles);
+    println!("{}", lcm(lcm(cycles[1], cycles[2]), cycles[0])/2);
     Ok(())
 }
