@@ -23,7 +23,7 @@ struct Operation {
     param_mode_3: u32,
 }
 
-
+#[derive(Clone)]
 pub struct Computer {
     eip: usize,
     relative_base: i64,
